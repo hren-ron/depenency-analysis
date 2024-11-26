@@ -155,9 +155,9 @@ def compare_different_thresholds(repos, nums, flag, method, type, root_path):
                             auc = roc_auc_score(true_labels, pre_labels)
 
                         print(acc, f1, pre, rec)
-                        # print(sen,spe)
+
                         print(mcc, auc, fpr)
-                        #break
+
                         csv_writer.writerow([repos[i], j, THRESHOLD, k, cla, 'Accuracy', acc])
                         csv_writer.writerow([repos[i], j, THRESHOLD, k, cla, 'F1', f1])
                         csv_writer.writerow([repos[i], j, THRESHOLD, k, cla, 'Precision', pre])
@@ -167,4 +167,3 @@ def compare_different_thresholds(repos, nums, flag, method, type, root_path):
                         csv_writer.writerow([repos[i], j, THRESHOLD, k, cla, 'MCC', mcc])
                         csv_writer.writerow([repos[i], j, THRESHOLD, k, cla, 'AUC', auc])
                         csv_writer.writerow([repos[i], j, THRESHOLD, k, cla, 'FPR', fpr])
-
