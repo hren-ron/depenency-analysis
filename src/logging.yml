@@ -8,24 +8,19 @@ handlers:
     level: DEBUG
     formatter: simple
     stream: ext://sys.stdout
-  console_err:
-    class: logging.StreamHandler
-    level: ERROR
-    formatter: simple
-    stream: ext://sys.stderr
   fileHandler:
     class: logging.handlers.RotatingFileHandler
     level: DEBUG
     formatter: simple
-    filename: log/app.log
-    maxBytes: 1024
-    backupCount: 5
+    filename: log/mapping_bug.log
+    backupCount: 7
     encoding: utf8
+    maxBytes: 10485760
 loggers:
-  simpleExample:
+  simpleLogger:
     level: DEBUG
     handlers: [console]
     propagate: yes
 root:
   level: DEBUG
-  handlers: [console_err]
+  handlers: [fileHandler]

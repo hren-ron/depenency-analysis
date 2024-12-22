@@ -13,6 +13,16 @@ def load_json_data(path):
         f.close()
     return data
 
+def save_json_data(path, data):
+    '''
+    保存json文件
+    :param path:
+    :param data:
+    :return:
+    '''
+    with open(path, 'w') as f:
+        json.dump(data, f, indent=4)
+        f.close()
 
 def load_csv_data(path):
     '''
