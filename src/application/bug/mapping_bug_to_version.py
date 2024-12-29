@@ -127,6 +127,7 @@ def mapping_bugs(root_path, repo, bugs, bug_commits, repo_versions, commit_times
     total_count = 0
     mutli_version = 0
     bug_versions = {}
+    bug_fixing_version_commits = {}
     for bug in set(bugs):
         if bug not in bug_commits.keys():
             continue
@@ -135,14 +136,17 @@ def mapping_bugs(root_path, repo, bugs, bug_commits, repo_versions, commit_times
         ## 得到bug的修复版本
         fixing_version_commits = mapping_bug_based_on_fixing_time(bug, bug_commits, repo_versions[repo], commit_times,
                                                                   version_times)
-        if len(fixing_version_commits) == 0:
-            continue
+
+        bug_fixing_version_commits[bug] = fixing_version_commits
+
 
         ## 得到bug的报告版本
         report_version = mapping_bug_based_on_report_time('{}/{}/data/b{}.xml'.format(root_path, repo, bug),
                                                           repo_versions[repo], version_times)
 
         ## 得到bug的持续版本
+        if len(fixing_version_commits) == 0:
+            continue
         versions = get_versions_from_report_to_fixed(fixing_version_commits, int(report_version))
         logger.info('bug: {}, continuous versions: {}'.format(bug, versions))
 
@@ -158,7 +162,7 @@ def mapping_bugs(root_path, repo, bugs, bug_commits, repo_versions, commit_times
                                                                                                      len(set(bugs)),
                                                                                                      total_count, count,
                                                                                                      mutli_version))
-    return bug_versions
+    return bug_fixing_version_commits, bug_versions
 
 
 def mapping_bug_to_version(root_path, repos, repo_versions):
@@ -185,12 +189,18 @@ def mapping_bug_to_version(root_path, repos, repo_versions):
         # print(commit_times)
 
         # 处理blocking bugs
-        bug_versions = mapping_bugs(root_path, repo, blocking_bugs, bug_commits, repo_versions, commit_times,
-                                    version_times)
+        blocking_bug_version_commits, bug_versions = mapping_bugs(root_path, repo, blocking_bugs, bug_commits,
+                                                                  repo_versions, commit_times,
+                                                                  version_times)
+        save_json_data('{}/{}/version/blocking_bug_to_version_commits.json'.format(root_path, repo),
+                       blocking_bug_version_commits)
         save_json_data('{}/{}/version/blocking_bug_to_version.json'.format(root_path, repo), bug_versions)
 
         # 处理blocked bugs
-        bug_versions = mapping_bugs(root_path, repo, blocked_bugs, bug_commits, repo_versions, commit_times,
-                                    version_times)
+        blocked_bug_version_commits, bug_versions = mapping_bugs(root_path, repo, blocked_bugs, bug_commits,
+                                                                 repo_versions, commit_times,
+                                                                 version_times)
+        save_json_data('{}/{}/version/blocked_bug_to_version_commits.json'.format(root_path, repo),
+                       blocked_bug_version_commits)
         save_json_data('{}/{}/version/blocked_bug_to_version.json'.format(root_path, repo), bug_versions)
-        #break
+        # break

@@ -42,6 +42,18 @@ def load_csv_data(path):
         f.close()
     return repo_version_time
 
+def save_csv_data(path, headers, data):
+    '''
+    保存csv文件
+    :param path:
+    :param headers:
+    :param data:
+    :return:
+    '''
+    file=open(path, 'w', encoding='utf-8', newline='')
+    writer=csv.writer(file)
+    writer.writerow(headers)
+    writer.writerows(data)
 
 def get_commit_time(path, repo):
     '''
