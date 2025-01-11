@@ -81,3 +81,40 @@ def get_commit_time(path, repo):
                     3] + ' ' + times[5]
         file.close()
     return commit_time
+
+
+def get_file_process_metrics(path):
+    '''
+    获取文件过程度量
+    :param path:
+    :return:
+    '''
+
+    file_metrics = {}
+
+    with open(path, 'r', encoding='utf8') as file:
+        reader = csv.reader(file)
+        for row in reader:
+            # print(row)
+            if row[0] == 'file':
+                continue
+            key = f"{row[0]}#{row[1]}"
+            file_metrics[key] = row[2:]
+        file.close()
+    return file_metrics
+
+def combine_process_data(path, file_metrics):
+    datas=[]
+    with open(path, 'r', encoding='utf8') as file:
+        reader = csv.reader(file)
+        for row in reader:
+            if row[0] == 'file':
+                continue
+            key = f"{row[0]}#{row[1]}"
+
+            temp = row[:-2]
+            temp.extend(file_metrics[key])
+            temp.extend(row[-2:])
+            datas.append(temp)
+        file.close()
+    return datas
