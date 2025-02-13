@@ -2,6 +2,23 @@
 from globalLog import logger
 from tools.process_csv_file import *
 
+
+def combine_process_data(path, file_metrics):
+    datas=[]
+    with open(path, 'r', encoding='utf8') as file:
+        reader = csv.reader(file)
+        for row in reader:
+            if row[0] == 'file':
+                continue
+            key = f"{row[0]}#{row[1]}"
+
+            temp = row[:-2]
+            temp.extend(file_metrics[key])
+            temp.extend(row[-2:])
+            datas.append(temp)
+        file.close()
+    return datas
+
 def combine_process_metrics(repos, root_path, repo_num):
 
     for repo in repos:
