@@ -2,6 +2,7 @@ from application.bug.extract_buggy_files_for_each_version import get_version_bug
 from application.bug.mapping_bug_to_version import mapping_bug_to_version
 from application.dataset.generate_dependency_dataset import generate_version_datasets
 from application.dataset.combine_process_metrics import combine_process_metrics
+from application.pca.pca_result_analysis import transfer_table
 from settings import Settings
 from tools.process_csv_file import load_json_data
 
@@ -21,11 +22,16 @@ def main():
 
     repo_version_nums = list(map(int, settings.get_config('basic', 'repo_version_nums').split(',')))
     repo_num = dict(zip(repos, repo_version_nums))
-    depends=settings.get_config('basic', 'depends').split(',')
+    depends=settings.get_config('metric', 'depends').split(',')
 
-    #generate_version_datasets(root_path, repos, repo_num, depends)
+    # generate_version_datasets(root_path, repos, repo_num, depends)
 
-    combine_process_metrics(repos, root_path, repo_num)
+    # combine_process_metrics(repos, root_path, repo_num)
+
+    # 计算PCA, 将PCA结果转换成latex表格
+    dependbys = settings.get_config('metric', 'dependbys').split(',')
+    processes = settings.get_config('metric', 'process').split(',')
+    transfer_table(root_path, repo_versions, 'all_version', depends, processes,'blocked')
 
     # compute_metrics(repos, repo_version_nums, root_path, threshold_type='medium')
     # compare_thresholds(repos, repo_version_nums, root_path)
