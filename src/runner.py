@@ -31,7 +31,10 @@ def main():
     # 计算PCA, 将PCA结果转换成latex表格
     dependbys = settings.get_config('metric', 'dependbys').split(',')
     processes = settings.get_config('metric', 'process').split(',')
-    transfer_table(root_path, repo_versions, 'all_version', depends, processes,'blocked')
+    # transfer_table(root_path, repo_versions, 'all_version', depends, processes,'blocked')
+    # transfer_table(root_path, repo_versions, 'all_version', depends, processes, 'blocking')
+    # transfer_table(root_path, repo_versions, 'part_version', depends, processes, 'blocking')
+    transfer_table(root_path, repo_versions, 'part_version', depends, processes, 'blocked')
 
     # compute_metrics(repos, repo_version_nums, root_path, threshold_type='medium')
     # compare_thresholds(repos, repo_version_nums, root_path)
